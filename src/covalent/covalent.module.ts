@@ -3,7 +3,7 @@ import { CovalentService } from './covalent.service';
 import { CovalentController } from './covalent.controller';
 
 @Module({
-    controllers: [CovalentService],
-    providers: [CovalentController],
+    controllers: [CovalentController],
+    providers: [CovalentService],
 })
 export class CovalentModule { }

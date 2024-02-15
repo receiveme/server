@@ -9,7 +9,9 @@ import { CovalentModule } from './covalent/covalent.module';
 
 @Module({
     imports: [
-        ConfigModule.forRoot({}),
+        ConfigModule.forRoot({
+            envFilePath: '.env'
+        }),
         UsersModule,
         ProfilesModule,
         SocialsModule,

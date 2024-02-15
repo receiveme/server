@@ -1,55 +1,53 @@
 import {
     Controller,
     Get,
-    Param,
+    Query,
 } from '@nestjs/common';
 import { CovalentService } from './covalent.service';
 import { Chain, Quote } from '@covalenthq/client-sdk';
 
 @Controller('covalent')
 export class CovalentController {
-    constructor(private readonly covalentService: CovalentService) {
-        this.covalentService = covalentService;
-    }
+    constructor(private readonly covalentService: CovalentService) { }
 
     @Get("/wallet-balance")
-    walletBalance(@Param('address') address: string, @Param('chain') chain?: Chain) {
-        return this.covalentService.walletBalance(address, chain);
+    async walletTokensBalance(@Query('address') address: string, @Query('chain') chain?: Chain) {
+        return await this.covalentService.walletTokensBalance({ address, chain });
     }
 
     @Get("/historical-balance")
-    historicalBalance(@Param('address') address: string, @Param('chain') chain?: Chain) {
-        return this.covalentService.historicalBalance(address, chain);
+    async walletHistoricalBalance(@Query('address') address: string, @Query('chain') chain?: Chain) {
+        return await this.covalentService.walletHistoricalBalance({ address, chain });
     }
 
     @Get("/native-balance")
-    nativeBalance(@Param('address') address: string, @Param('chain') chain?: Chain) {
-        return this.covalentService.nativeBalance(address, chain);
+    async walletNativeBalance(@Query('address') address: string, @Query('chain') chain?: Chain) {
+        return await this.covalentService.walletNativeBalance({ address, chain });
     }
 
     @Get("/tx")
-    tx(@Param('tx') tx: string, @Param('chain') chain?: Chain) {
-        return this.covalentService.tx(tx, chain);
+    async getTransaction(@Query('tx') tx: string, @Query('chain') chain?: Chain) {
+        return await this.covalentService.getTransaction({ tx, chain });
     }
 
     @Get("/tx-summary")
-    txSummary(@Param('address') address: string, @Param('chain') chain?: Chain) {
-        return this.covalentService.txSummary(address, chain);
+    async getTransactionSummary(@Query('address') address: string, @Query('chain') chain?: Chain) {
+        return await this.covalentService.getTransactionSummary({ address, chain });
     }
 
     @Get("/token-approvals")
-    tokenApprovals(@Param('address') address: string, @Param('chain') chain?: Chain) {
-        return this.covalentService.tokenApprovals(address, chain);
+    async getTokenApprovals(@Query('address') address: string, @Query('chain') chain?: Chain) {
+        return await this.covalentService.getTokenApprovals({ address, chain });
     }
 
     @Get("/token-price")
-    tokenPriceHistory(
-        @Param('address') contractAddress: string,
-        @Param('chain') chain?: Chain,
-        @Param('currency') currency?: Quote,
-        @Param('from') from?: string,
-        @Param('to') to?: string
+    async getTokenPrices(
+        @Query('address') contractAddress: string,
+        @Query('chain') chain?: Chain,
+        @Query('currency') currency?: Quote,
+        @Query('from') from?: string,
+        @Query('to') to?: string
     ) {
-        return this.covalentService.tokenPriceHistory(contractAddress, chain, currency, from, to);
+        return await this.covalentService.getTokenPrices({ contractAddress, chain, currency, from, to });
     }
 }
