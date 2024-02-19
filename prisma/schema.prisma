@@ -1,3 +1,6 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,42 +11,52 @@ datasource db {
 }
 
 model User {
-  id      String    @id @default(uuid())
-  created DateTime  @default(now())
-  handle  String    @unique
-  Profile Profile[]
-  Social  Social[]
-  Wallet  Wallet[]
+  id          String    @id @default(uuid())
+  created     DateTime  @default(now())
+  handle      String    @unique
+  authuuid    String?
+  Profile     profile[]
+  Social      social[]
+  Wallet      wallet[]
+
+  @@map("users")
 }
 
-model Profile {
-  userId     String   @id @default(uuid())
+model profile {
+  id         String   @id @default(uuid())
+  userid     String
   created    DateTime @default(now())
-  theme      String? // Optional field
-  background String? // Optional field
-  image      String? // Optional field
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  theme      String?  // Optional field
+  background String?  // Optional field
+  image      String?  // Optional field
+  user       User     @relation(fields: [userid], references: [id], onDelete: Cascade)
+  
   @@map("profiles")
 }
 
-model Social {
-  id       String   @id @default(uuid())
-  created  DateTime @default(now())
-  social   String? // Optional field
-  platform String? // Optional field
-  userId   String?  @map("userid") // Optional, maps to the 'userid' column, allowing nulls
-  user     User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+model social {
+  id                String   @id @default(uuid())
+  userid            String
+  networkid         String?
+  particle_token    String?
+  particle_uuid     String?
+  created           DateTime @default(now())
+  name              String?  // Optional field
+  platform          String?  // Optional field
+  imageurl          String?  // Optional field for storing image URLs
+  user              User     @relation(fields: [userid], references: [id], onDelete: Cascade)
+  
   @@map("socials")
 }
 
-model Wallet {
-  address String    @id
-  network String? // Optional field
-  userId  String?   @map("userid") // Optional, maps to the 'userid' column, allowing nulls
-  created DateTime? @default(now()) // Assuming the creation timestamp might be needed, even if null in the original definition
-  user    User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model wallet {
+  id                    String    @id @default(uuid())
+  userid                String
+  address               String    
+  network               String?   // Optional field
+  created               DateTime? @default(now())
+  user                  User      @relation(fields: [userid], references: [id], onDelete: Cascade)
+  preferrednetworks     String[]  // Array of strings
 
   @@map("wallets")
 }

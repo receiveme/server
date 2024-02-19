@@ -10,36 +10,22 @@ import {
 import { ProfilesService } from './profiles.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('profiles')
 export class ProfilesController {
-    constructor(private readonly profilesService: ProfilesService) {}
+    constructor(
+        private readonly profilesService: ProfilesService,
+        private readonly usersService: UsersService,
+    ) {}
 
     @Post()
-    create(@Body() createProfileDto: CreateProfileDto) {
-        return this.profilesService.create(createProfileDto);
-    }
-
-    @Get()
-    findAll() {
-        return this.profilesService.findAll();
-    }
-
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.profilesService.findOne(+id);
-    }
-
-    @Patch(':id')
     update(
-        @Param('id') id: string,
-        @Body() updateProfileDto: UpdateProfileDto,
+        @Body('uuid') uuid: string,
+        @Body('token') token: string,
+        @Body('theme') theme: string,
+        @Body('background') background: string,
     ) {
-        return this.profilesService.update(+id, updateProfileDto);
-    }
-
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.profilesService.remove(+id);
+        return this.profilesService.update(uuid, token, theme, background);
     }
 }
