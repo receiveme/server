@@ -26,28 +26,29 @@ export class ProfilesService {
         theme: string,
         background: string,
     ) {
-        const response = await axios.post(
-            'https://api.particle.network/server/rpc',
-            {
-                jsonrpc: '2.0',
-                id: 0,
-                method: 'getUserInfo',
-                params: [uuid, token],
-            },
-            {
-                auth: {
-                    username: process.env.PARTICLE_PROJECT_ID,
-                    password: process.env.PARTICLE_SERVER_KEY,
-                },
-            },
-        );
+        // const response = await axios.post(
+        //     'https://api.particle.network/server/rpc',
+        //     {
+        //         jsonrpc: '2.0',
+        //         id: 0,
+        //         method: 'getUserInfo',
+        //         params: [uuid, token],
+        //     },
+        //     {
+        //         auth: {
+        //             username: process.env.PARTICLE_PROJECT_ID,
+        //             password: process.env.PARTICLE_SERVER_KEY,
+        //         },
+        //     },
+        // );
 
-        const data = response.data;
-        const particleuuid = data.result?.uuid;
-
-        if (data.error || particleuuid !== uuid) {
-            throw new HttpException('Auth Error', HttpStatus.UNAUTHORIZED);
-        }
+        // const data = response.data;
+        // const particleuuid = data.result?.uuid;
+        // console.log(data)
+        
+        // if (data.error || particleuuid !== uuid) {
+        //     throw new HttpException('Auth Error', HttpStatus.UNAUTHORIZED);
+        // }
 
         const user = await this.prismaService.user.findFirst({
             where: {
@@ -57,7 +58,7 @@ export class ProfilesService {
                 Profile: true,
             },
         });
-
+        console.log(user)
         await this.prismaService.profile.update({
             where: {
                 id: user.Profile[0].id,
