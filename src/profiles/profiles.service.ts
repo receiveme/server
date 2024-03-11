@@ -60,7 +60,7 @@ export class ProfilesService {
 
         await this.prismaService.profile.update({
             where: {
-                userId: user.id,
+                id: user.Profile[0].id,
             },
             data: {
                 theme,
