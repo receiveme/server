@@ -1,13 +1,21 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Injectable } from '@nestjs/common';
+// import { CreateUserDto } from './dto/create-user.dto';
+// import { UpdateUserDto } from './dto/update-user.dto';
 
 // import axios from 'axios';
-// import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
-    // constructor(private prismaService: PrismaService) {}
+    constructor(private prismaService: PrismaService) {}
+
+    async findOneByHandle(handle: string) {
+        return this.prismaService.user.findFirst({
+            where: {
+                handle: handle,
+            },
+        });
+    }
     // async findOneByUuid(uuid: string, token: string) {
     //     const response = await axios.post(
     //         'https://api.particle.network/server/rpc',

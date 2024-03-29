@@ -1,17 +1,19 @@
-import {
-    Controller,
-    Get,
-    Post,
-    Body,
-    Patch,
-    Param,
-    Delete,
-} from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
+
+    @Get('handle/taken')
+    async isHandleUnique(@Query('q') handle: string) {
+        if (!handle) return false;
+
+        console.log(handle);
+        const isTaken = await this.usersService.findOneByHandle(handle);
+
+        console.log({ isTaken });
+
+        return !!isTaken;
+    }
 }
